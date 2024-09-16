@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: policy-manager
+  namespace: openshift-gitops
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: openshift-gitops
+  source:
+    path: policy-manager/manage-by-tag
+    repoURL: 'https://github.com/brian-jarvis/policy-release-management.git'
+    targetRevision: main
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      allowEmpty: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - ServerSideApply=true
+      - Validate=false

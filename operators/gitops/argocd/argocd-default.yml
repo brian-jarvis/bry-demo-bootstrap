@@ -1,0 +1,135 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ArgoCD
+metadata:
+  name: openshift-gitops
+  namespace: openshift-gitops
+spec:
+  server:
+    autoscale:
+      enabled: false
+    grpc:
+      ingress:
+        enabled: false
+    ingress:
+      enabled: false
+    resources:
+      limits:
+        cpu: 500m
+        memory: 256Mi
+      requests:
+        cpu: 125m
+        memory: 128Mi
+    route:
+      enabled: true
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: reencrypt
+    service:
+      type: ''
+  applicationSet:
+    resources:
+      limits:
+        cpu: '2'
+        memory: 1Gi
+      requests:
+        cpu: 250m
+        memory: 512Mi
+    webhookServer:
+      ingress:
+        enabled: false
+      route:
+        enabled: false
+  grafana:
+    enabled: false
+    ingress:
+      enabled: false
+    route:
+      enabled: false
+  helpChatText: ArgoCD Chat!!!
+  prometheus:
+    enabled: false
+    ingress:
+      enabled: false
+    route:
+      enabled: true
+  initialSSHKnownHosts: {}
+  sso:
+    dex:
+      openShiftOAuth: true
+      resources:
+        limits:
+          cpu: 500m
+          memory: 256Mi
+        requests:
+          cpu: 250m
+          memory: 128Mi
+    provider: dex
+  rbac:
+    defaultPolicy: readonly
+    policy: |
+      g, "bry-tam", role:admin
+      p, role:org-team, projects, get, *, allow
+      p, role:org-team, projects, create, *, allow
+      p, role:org-team, projects, update, *, allow
+      p, role:org-team, projects, delete, *, allow
+      g, argoteam, role:org-team
+    scopes: '[groups]'
+  kustomizeBuildOptions: --enable-alpha-plugins
+  repo:
+    env:
+    - name: KUSTOMIZE_PLUGIN_HOME
+      value: /etc/kustomize/plugin
+    initContainers:
+    - args:
+      - -c
+      - cp /policy-generator/PolicyGenerator-not-fips-compliant  /policy-generator-tmp/PolicyGenerator
+      command:
+      - /bin/bash
+      image: 'registry.redhat.io/rhacm2/multicluster-operators-subscription-rhel9:v2.11' 
+      name: policy-generator-install
+      volumeMounts:
+      - mountPath: /policy-generator-tmp
+        name: policy-generator
+    volumeMounts:
+    - mountPath: /etc/kustomize/plugin/policy.open-cluster-management.io/v1/policygenerator
+      name: policy-generator
+    volumes:
+    - emptyDir: {}
+      name: policy-generator 
+    resources:
+      limits:
+        cpu: '1'
+        memory: 1Gi
+      requests:
+        cpu: 250m
+        memory: 256Mi
+  helpChatURL: 'https://cloud-native.slack.com/archives/C01TSERG0KZ'
+  ha:
+    enabled: false
+    resources:
+      limits:
+        cpu: 500m
+        memory: 256Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
+  tls:
+    ca: {}
+  redis:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 256Mi
+      requests:
+        cpu: 250m
+        memory: 128Mi
+  controller:
+    processors: {}
+    resources:
+      limits:
+        cpu: '2'
+        memory: 2Gi
+      requests:
+        cpu: 250m
+        memory: 1Gi
+    sharding: {}
