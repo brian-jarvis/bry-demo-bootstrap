@@ -4,11 +4,21 @@ metadata:
   name: cluster
 spec:
   identityProviders:
-  - name: goog-auth
+  - name: redhat-sso
     mappingMethod: claim 
-    type: Google
-    google:
-      clientID: '35776496954-t09ldpfqtsdcmeo29momtfs6inmelcbi.apps.googleusercontent.com'
-      clientSecret: 
+    openID:
+      claims:
+        email:
+          - email
+        name:
+          - name
+        preferredUsername:
+          - email
+      clientID: 35776496954-t09ldpfqtsdcmeo29momtfs6inmelcbi.apps.googleusercontent.com
+      clientSecret:
         name: goog-auth
-      hostedDomain: "redhat.com" 
+      extraScopes:
+        - profile
+        - email
+      issuer: 'https://accounts.google.com'
+    type: OpenID

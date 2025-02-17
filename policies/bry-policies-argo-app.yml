@@ -9,7 +9,7 @@ spec:
     namespace: openshift-gitops
   source:
     path: policy-manager/manage-by-tag
-    repoURL: 'https://github.com/brian-jarvis/policy-release-management.git'
+    repoURL: 'https://github.com/bry-tam/policy-release-management.git'
     targetRevision: main
   project: default
   syncPolicy:

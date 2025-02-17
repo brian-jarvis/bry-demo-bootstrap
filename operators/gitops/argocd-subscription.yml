@@ -2,16 +2,13 @@ apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
   name: openshift-gitops-operator
-  namespace: openshift-operators
+  namespace: openshift-gitops-operator
   labels:
     control-plane: controller-manager
 spec:
-  channel: gitops-1.9
+  channel: gitops-1.13
   config:
     env:
-      ## remove the default ARGOCD instance
-      # - name: DISABLE_DEFAULT_ARGOCD_INSTANCE
-      #   value: "true"
       - name: ARGOCD_CLUSTER_CONFIG_NAMESPACES
         value: openshift-gitops
   installPlanApproval: Automatic
