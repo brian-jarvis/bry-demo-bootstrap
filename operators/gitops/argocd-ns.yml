@@ -7,3 +7,11 @@ metadata:
     openshift.io/cluster-monitoring: 'true'
     argocd.argoproj.io/managed-by: openshift-gitops
     app.host: argocd
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: openshift-gitops-operator
+  labels:
+    openshift.io/cluster-monitoring: 'true'
+
