@@ -6,7 +6,7 @@ metadata:
   labels:
     control-plane: controller-manager
 spec:
-  channel: gitops-1.13
+  channel: gitops-1.19
   config:
     env:
       - name: ARGOCD_CLUSTER_CONFIG_NAMESPACES
