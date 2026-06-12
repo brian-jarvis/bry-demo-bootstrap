@@ -4,6 +4,7 @@ metadata:
   name: openshift-gitops
   namespace: openshift-gitops
 spec:
+  aggregatedClusterRoles: true
   server:
     autoscale:
       enabled: false
